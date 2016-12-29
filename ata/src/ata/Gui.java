@@ -24,7 +24,7 @@ import javax.swing.JPanel;
 
 public class Gui extends JFrame{
 
-	String version = "Version 0.1";
+	String version = "Version 0.2";
 	
 	JPanel zoneclient;
 
@@ -91,10 +91,15 @@ public class Gui extends JFrame{
 		panType.add(boxType);
 		panTache.add(boxTask);
 		panImmat.add(boxImma);
-		panDate.add(boxDate);
+		//panDate.add(boxDate);
 		panName.add(boxName);
-
+		
+		
 		feedBoxAta();
+		feedBoxType();
+		feedBoxImmat();
+		feedBoxTask();
+		feedBoxName();
 		
 		JPanel panBT = new JPanel();
 		panBT.add(labRetour);
@@ -112,11 +117,20 @@ public class Gui extends JFrame{
 		btOK.addFocusListener(new appFocusListener());
 		btOK.addActionListener(new appActionListener());
 		btDis.addActionListener(new appActionListener());
+		
+		boxType.addItemListener(new appItemListener());
+		boxType.addFocusListener(new appFocusListener());
 
-	}
+		boxImma.addItemListener(new appItemListener());
+		boxImma.addFocusListener(new appFocusListener());
+		
+		boxTask.addItemListener(new appItemListener());
+		boxTask.addFocusListener(new appFocusListener());
+		
+		boxName.addItemListener(new appItemListener());
+		boxName.addFocusListener(new appFocusListener());
 
-	public void feedboxType(){
-		boxType.addItem(" ");
+		
 	}
 	
 	public void feedBoxAta(){
@@ -127,6 +141,66 @@ public class Gui extends JFrame{
 			vecStr = Manager.getAllAtas();
 			for(String str : vecStr){
 				boxAta.addItem(str);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void feedBoxType(){
+		boxType.removeAllItems();
+		boxType.addItem(" ");
+		Vector<String> vecStr;
+		try {
+			vecStr = Manager.getAllTypes();
+			for(String str : vecStr){
+				boxType.addItem(str);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void feedBoxImmat(){
+		boxImma.removeAllItems();
+		boxImma.addItem(" ");
+		Vector<String> vecStr;
+		try {
+			vecStr = Manager.getAllImmats();
+			for(String str : vecStr){
+				boxImma.addItem(str);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void feedBoxTask(){
+		boxTask.removeAllItems();
+		boxTask.addItem(" ");
+		Vector<String> vecStr;
+		try {
+			vecStr = Manager.getAllTasks();
+			for(String str : vecStr){
+				boxTask.addItem(str);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void feedBoxName(){
+		boxName.removeAllItems();
+		boxName.addItem(" ");
+		Vector<String> vecStr;
+		try {
+			vecStr = Manager.getAllNames();
+			for(String str : vecStr){
+				boxName.addItem(str);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -187,6 +261,8 @@ public class Gui extends JFrame{
 				panCheck.getCb3().setState(false);
 				panCheck.getCb4().setState(false);
 				panCheck.getCb5().setState(false);
+				
+				feedAll();
 
 			}
 			else{
@@ -197,6 +273,14 @@ public class Gui extends JFrame{
 			e.printStackTrace();
 		}
 
+	}
+	
+	public void feedAll(){
+		feedBoxAta();
+		feedBoxType();
+		feedBoxImmat();
+		feedBoxTask();
+		feedBoxName();
 	}
 
 	class appActionListener implements ActionListener{
@@ -225,6 +309,7 @@ public class Gui extends JFrame{
 		@Override
 		public void itemStateChanged(ItemEvent e) {
 			// TODO Auto-generated method stub
+			
 			if(e.getSource() == boxAta && e.getStateChange() == 1 && boxAta.getSelectedIndex() != 0){
 				String text = panAta.getTf().getText();
 				String ata = boxAta.getSelectedItem().toString();
@@ -237,10 +322,56 @@ public class Gui extends JFrame{
 				}
 
 			}
+			
+			if(e.getSource() == boxType && e.getStateChange() == 1 && boxType.getSelectedIndex() != 0){
+				String type = boxType.getSelectedItem().toString();
+				panType.getTf().setText("");
+				panType.getTf().setText(type);
+			}
+			
+			if(e.getSource() == boxImma && e.getStateChange() == 1 && boxImma.getSelectedIndex() != 0){
+				String imma = boxImma.getSelectedItem().toString();
+				panImmat.getTf().setText("");
+				panImmat.getTf().setText(imma);
+				
+				try {
+					if(Manager.ImmatExists(imma)){
+						String type = Manager.getTypeFromImmat(imma);
+						panType.getTf().setText(type);
+						boxType.setSelectedItem(type);
+					}
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+			
+			if(e.getSource() == boxTask && e.getStateChange() == 1 && boxTask.getSelectedIndex() != 0){
+				String Task = boxTask.getSelectedItem().toString();
+				panTache.getTf().setText("");
+				panTache.getTf().setText(Task);
+			}
+			
+			if(e.getSource() == boxName && e.getStateChange() == 1 && boxName.getSelectedIndex() != 0){
+				String Name = boxName.getSelectedItem().toString();
+				panName.getTf().setText("");
+				panName.getTf().setText(Name);
+			}
+			
+			fixGui();
+			
 		}
 
 	}
 
+	public void fixGui(){
+		zoneclient.revalidate();
+		zoneclient.repaint();
+		panCheck.repaint();
+		panCheck.revalidate();
+	}
+	
 	class appFocusListener implements FocusListener{
 
 		@Override
@@ -253,8 +384,7 @@ public class Gui extends JFrame{
 		@Override
 		public void focusLost(FocusEvent arg0) {
 			// TODO Auto-generated method stub
-			zoneclient.revalidate();
-			zoneclient.repaint();
+			fixGui();
 			if(arg0.getSource() == btOK){
 				labRetour.setText("");
 			}

@@ -56,34 +56,122 @@ public class Manager {
 			int aprs = rs.getInt("aprs");
 			String name = rs.getString("name");
 			
-			String ret = date + ", " + type + ", " + immat + ", " + ata + ", " + task ;
+			String ret = date + "\t \"" + type + "\"\t \"" + immat + "\"\t \"" + ata + "\"\t \"" + task + "\"" ;
 			if(formation > 0){
-				ret += ", formation";
+				ret += "\t \"oui\"";
+			}
+			else{
+				ret += "\t \"non\"";
 			}
 			
+			
 			if(execution > 0){
-				ret += ", execution";
+				ret += "\t \"oui\"";
+			}
+			else{
+				ret += "\t \"non\"";
 			}
 			
 			
 			if(controle > 0){
-				ret += ", controle";
+				ret += "\t \"oui\"";
+			}
+			else{
+				ret += "\t \"non\"";
 			}
 			
 			
 			if(encadrement > 0){
-				ret += ", encadrement";
+				ret += "\t \"oui\"";
+			}
+			else{
+				ret += "\t \"non\"";
 			}
 			
 			if(aprs > 0){
-				ret += ", arps";
+				ret += "\t \"oui\"";
+			}
+			else{
+				ret += "\t \"non\"";
 			}
 			
-			ret += " : " + name;
+			ret += "\t \"" + name + "\"";
 			vecRet.add(ret);
 		}
 		
 		return vecRet;
+	}
+	
+	public static Vector<String> getAllTypes() throws SQLException{
+		String sql = "SELECT DISTINCT type FROM line ORDER BY type";
+		PreparedStatement st = DB.getConnexion().prepareStatement(sql);
+		ResultSet rs = st.executeQuery();
+		Vector<String> vec = new Vector<String>();
+		while(rs.next()){
+			vec.add(rs.getString("type"));
+		}
+		return vec;
+	}
+	
+	public static Vector<String> getAllImmats() throws SQLException{
+		String sql = "SELECT DISTINCT immat FROM line ORDER BY immat";
+		PreparedStatement st = DB.getConnexion().prepareStatement(sql);
+		ResultSet rs = st.executeQuery();
+		Vector<String> vec = new Vector<String>();
+		while(rs.next()){
+			vec.add(rs.getString("immat"));
+		}
+		return vec;
+	}
+	
+	public static Vector<String> getAllTasks() throws SQLException{
+		String sql = "SELECT DISTINCT task FROM line ORDER BY task";
+		PreparedStatement st = DB.getConnexion().prepareStatement(sql);
+		ResultSet rs = st.executeQuery();
+		Vector<String> vec = new Vector<String>();
+		while(rs.next()){
+			vec.add(rs.getString("task"));
+		}
+		return vec;
+	}
+	
+	public static Vector<String> getAllNames() throws SQLException{
+		String sql = "SELECT DISTINCT name FROM line ORDER BY name";
+		PreparedStatement st = DB.getConnexion().prepareStatement(sql);
+		ResultSet rs = st.executeQuery();
+		Vector<String> vec = new Vector<String>();
+		while(rs.next()){
+			vec.add(rs.getString("name"));
+		}
+		return vec;
+	}
+	
+	public static boolean ImmatExists(String immat) throws SQLException{
+		String sql = "SELECT immat FROM line WHERE immat = ?";
+		PreparedStatement st = DB.getConnexion().prepareStatement(sql);
+		st.setString(1, immat);
+		ResultSet rs = st.executeQuery();
+		int nb = 0;
+		while(rs.next()){
+			nb++;
+		}
+		boolean ret = false;
+		if(nb > 0){
+			ret = true;
+		}
+		return ret;
+	}
+	
+	public static String getTypeFromImmat(String immat) throws SQLException{
+		String sql = "SELECT type FROM line WHERE immat = ?";
+		PreparedStatement st = DB.getConnexion().prepareStatement(sql);
+		st.setString(1, immat);
+		ResultSet rs = st.executeQuery();
+		String type = "null";
+		if(rs.next()){
+			type = rs.getString("type");
+		}
+		return type;
 	}
 	
 }
