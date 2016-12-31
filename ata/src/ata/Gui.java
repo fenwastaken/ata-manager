@@ -1,5 +1,6 @@
 package ata;
 
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -8,6 +9,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -24,7 +26,7 @@ import javax.swing.JPanel;
 
 public class Gui extends JFrame{
 
-	String version = "Version 0.2";
+	String version = "Version 0.3";
 	
 	JPanel zoneclient;
 
@@ -48,6 +50,7 @@ public class Gui extends JFrame{
 
 	JButton btOK = new JButton("Valider");
 	JButton btDis = new JButton("Afficher");
+	JButton btExcel = new JButton("Excel");
 
 
 	JLabel labRetour = new JLabel();
@@ -105,6 +108,7 @@ public class Gui extends JFrame{
 		panBT.add(labRetour);
 		panBT.add(btOK);
 		panBT.add(btDis);
+		panBT.add(btExcel);
 		panBT.add(Box.createRigidArea(new Dimension(30,10)));
 
 
@@ -117,6 +121,7 @@ public class Gui extends JFrame{
 		btOK.addFocusListener(new appFocusListener());
 		btOK.addActionListener(new appActionListener());
 		btDis.addActionListener(new appActionListener());
+		btExcel.addActionListener(new appActionListener());
 		
 		boxType.addItemListener(new appItemListener());
 		boxType.addFocusListener(new appFocusListener());
@@ -210,7 +215,7 @@ public class Gui extends JFrame{
 	
 	public void display(){
 		try {
-			Vector<String>  vec = Manager.getAllLines();
+			Vector<String>  vec = Manager.getAllLinesToString();
 			GuiDisplay gd = new GuiDisplay(vec);
 			gd.setVisible(true);
 		} catch (SQLException e) {
@@ -282,6 +287,27 @@ public class Gui extends JFrame{
 		feedBoxTask();
 		feedBoxName();
 	}
+	
+	public void excelify(){
+		Runnable r = new Runnable() {
+			
+			@Override
+			public void run() {
+				String file = Excel.create();
+				System.out.println("done");
+				try {
+					Desktop dt = Desktop.getDesktop();
+					dt.open(new File(file));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		};
+
+		Thread t = new Thread(r);
+		t.start();
+	}
 
 	class appActionListener implements ActionListener{
 
@@ -299,6 +325,10 @@ public class Gui extends JFrame{
 			
 			if(e.getSource() == btDis){
 				display();
+			}
+			
+			if(e.getSource() == btExcel){
+				excelify();
 			}
 		}
 

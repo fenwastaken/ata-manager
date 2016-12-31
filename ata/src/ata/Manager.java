@@ -38,7 +38,7 @@ public class Manager {
 	
 	}
 	
-	public static Vector<String> getAllLines() throws SQLException{
+	public static Vector<String> getAllLinesToString() throws SQLException{
 		String sql = "SELECT date, type, immat, ata, task, formation, execution, controle,  encadrement, aprs, name FROM line ORDER BY date";
 		PreparedStatement st = DB.getConnexion().prepareStatement(sql);
 		ResultSet rs = st.executeQuery();
@@ -97,6 +97,32 @@ public class Manager {
 			
 			ret += "\t \"" + name + "\"";
 			vecRet.add(ret);
+		}
+		
+		return vecRet;
+	}
+	
+	public static Vector<Line> getAllLinesToObject() throws SQLException{
+		String sql = "SELECT date, type, immat, ata, task, formation, execution, controle,  encadrement, aprs, name FROM line ORDER BY date";
+		PreparedStatement st = DB.getConnexion().prepareStatement(sql);
+		ResultSet rs = st.executeQuery();
+		Vector<Line> vecRet = new Vector<Line>();
+		while(rs.next()){
+			String date = rs.getString("date");
+			String type = rs.getString("type");
+			String immat = rs.getString("immat");
+			String ata = rs.getString("ata");
+			String task = rs.getString("task");
+			boolean formation = rs.getBoolean("formation");
+			boolean execution = rs.getBoolean("execution");
+			boolean controle = rs.getBoolean("controle");
+			boolean encadrement = rs.getBoolean("encadrement");
+			boolean aprs = rs.getBoolean("aprs");
+			String name = rs.getString("name");
+			
+			Line line = new Line(name, date, type, immat, ata, task, formation, execution, controle, encadrement, aprs);
+			
+			vecRet.add(line);
 		}
 		
 		return vecRet;
