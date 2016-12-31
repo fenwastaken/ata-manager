@@ -26,7 +26,7 @@ import javax.swing.JPanel;
 
 public class Gui extends JFrame{
 
-	String version = "Version 0.3";
+	String version = "Version 0.5";
 	
 	JPanel zoneclient;
 
@@ -293,7 +293,8 @@ public class Gui extends JFrame{
 			
 			@Override
 			public void run() {
-				String file = Excel.create();
+				Excel excel = new Excel();
+				String file = excel.create();
 				System.out.println("done");
 				try {
 					Desktop dt = Desktop.getDesktop();
@@ -344,13 +345,15 @@ public class Gui extends JFrame{
 				String text = panAta.getTf().getText();
 				String ata = boxAta.getSelectedItem().toString();
 				ata = ata.substring(0, ata.indexOf(","));
-				if(!text.isEmpty()){
-					panAta.getTf().setText(text + ", " + ata);
-				}
-				else{
-					panAta.getTf().setText(ata);
-				}
+				if(text.indexOf(ata) < 0){
+					if(!text.isEmpty()){
+						panAta.getTf().setText(text + ", " + ata);
+					}
+					else{
+						panAta.getTf().setText(ata);
+					}
 
+				}
 			}
 			
 			if(e.getSource() == boxType && e.getStateChange() == 1 && boxType.getSelectedIndex() != 0){

@@ -37,7 +37,7 @@ public class Excel {
 	private static String content = "";
 	private static String file = "";
 	
-	public static String create(){
+	public String create(){
 		
 		int[] iTable = new int[11] ;
 		
@@ -178,7 +178,7 @@ public class Excel {
 					}
 					column++;
 				}
-				
+				column = 0;
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
