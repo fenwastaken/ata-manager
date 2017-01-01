@@ -119,6 +119,37 @@ public class Line {
 		this.aprs = aprs;
 	}
 	
-	
+	public String toString(){
+		String ret = this.getDate() + ", "
+				+ this.getImmat() + ", "
+				+ this.getType() + ", "
+				+ this.getAta() + ", "
+				+ this.getTache();
+		
+		if(this.isControles()){
+			ret += ", Contrôles";
+		}
+		
+		if(this.isExecution()){
+			ret += ", Execution";
+		}
+		
+		if(this.isFormation()){
+			ret += ", Formation";
+		}
+		
+		if(this.isEncadrement()){
+			ret += ", Encadrement";
+		}
+		
+		if(this.isAprs()){
+			ret += ", APRS";
+		}
+		
+		ret += ", " + this.getNom();
+		
+		return ret;
+		
+	}
 	
 }

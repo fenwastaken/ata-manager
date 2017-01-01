@@ -51,6 +51,7 @@ public class Gui extends JFrame{
 	JButton btOK = new JButton("Valider");
 	JButton btDis = new JButton("Afficher");
 	JButton btExcel = new JButton("Excel");
+	JButton btEdit = new JButton("Editer");
 
 
 	JLabel labRetour = new JLabel();
@@ -109,6 +110,7 @@ public class Gui extends JFrame{
 		panBT.add(btOK);
 		panBT.add(btDis);
 		panBT.add(btExcel);
+		panBT.add(btEdit);
 		panBT.add(Box.createRigidArea(new Dimension(30,10)));
 
 
@@ -122,6 +124,8 @@ public class Gui extends JFrame{
 		btOK.addActionListener(new appActionListener());
 		btDis.addActionListener(new appActionListener());
 		btExcel.addActionListener(new appActionListener());
+		btEdit.addActionListener(new appActionListener());
+		
 		
 		boxType.addItemListener(new appItemListener());
 		boxType.addFocusListener(new appFocusListener());
@@ -294,7 +298,7 @@ public class Gui extends JFrame{
 			@Override
 			public void run() {
 				Excel excel = new Excel();
-				String file = excel.create();
+				String file = excel.create(null);
 				System.out.println("done");
 				try {
 					Desktop dt = Desktop.getDesktop();
@@ -330,6 +334,11 @@ public class Gui extends JFrame{
 			
 			if(e.getSource() == btExcel){
 				excelify();
+			}
+			
+			if(e.getSource() == btEdit){
+				GuiSelect gui = new GuiSelect();
+				gui.setVisible(true);
 			}
 		}
 

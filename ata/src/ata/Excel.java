@@ -37,7 +37,8 @@ public class Excel {
 	private static String content = "";
 	private static String file = "";
 	
-	public String create(){
+	
+	public String create(Vector<Line> vLine){
 		
 		int[] iTable = new int[11] ;
 		
@@ -56,7 +57,7 @@ public class Excel {
 			
 
 			
-			//check wether file exists
+			//check weither file exists
 			File f = new File(file);
 			while(f.exists() && !f.isDirectory()) {
 				//System.out.println("FILE " + file + " EXISTS");
@@ -97,9 +98,6 @@ public class Excel {
 				sheet.setColumnView(column, str.length() + 3);
 				column++;
 			}
-			
-			try {
-				Vector<Line> vLine = Manager.getAllLinesToObject();
 				
 				
 				for(Line ln : vLine){
@@ -179,10 +177,7 @@ public class Excel {
 					column++;
 				}
 				column = 0;
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+
 			
 			workbook.write();
 			workbook.close();
