@@ -38,6 +38,7 @@ public class Excel {
 	private String file = "";
 	private boolean displayName;
 	
+	SimpleDateFormat df = new SimpleDateFormat("dd/MM/YYYY");
 	
 	
 	public Excel(boolean displayName){
@@ -115,7 +116,7 @@ public class Excel {
 						row++;
 						
 						Vector<String> lnContent = new Vector<String>();
-						lnContent.add(ln.getDate());
+						lnContent.add(df.format(ln.getDate()));
 						lnContent.add(ln.getType());
 						lnContent.add(ln.getImmat());
 						lnContent.add(ln.getAta());

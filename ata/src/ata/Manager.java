@@ -1,5 +1,6 @@
 package ata;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,6 +16,14 @@ public class Manager {
 		st.executeUpdate();
 	}
 	
+	public static void updateDateLine(Line line) throws SQLException{
+		String sql = "UPDATE line SET date = ? WHERE id = ?";
+		PreparedStatement st = DB.getConnexion().prepareStatement(sql);
+		st.setLong(1, line.getDate().getTime());
+		st.setInt(2, line.getId());
+		st.executeUpdate();
+	}
+	
 	public static Vector<String> getAllAtas() throws SQLException{
 		String sql = "SELECT number, name FROM ata ORDER BY number";
 		PreparedStatement st = DB.getConnexion().prepareStatement(sql);
@@ -26,13 +35,13 @@ public class Manager {
 		return vec;
 	}
 
-	public static int saveLine(String name, String date, String type, String immat, String ata, String task, int formation, int execution, int controle, int encadrement, int aprs) throws SQLException{
+	public static int saveLine(String name, java.util.Date date, String type, String immat, String ata, String task, int formation, int execution, int controle, int encadrement, int aprs) throws SQLException{
 		String sql = "INSERT INTO line "
 				+ "(name, date, type, immat, ata, task, formation, execution, controle, encadrement, aprs, active)"
 				+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		PreparedStatement st = DB.getConnexion().prepareStatement(sql);
 		st.setString(1, name);
-		st.setString(2, date);
+		st.setLong(2, date.getTime());
 		st.setString(3, type);
 		st.setString(4, immat);
 		st.setString(5, ata);
@@ -118,7 +127,7 @@ public class Manager {
 		Vector<Line> vecRet = new Vector<Line>();
 		while(rs.next()){
 			int id = rs.getInt("id");
-			String date = rs.getString("date");
+			java.util.Date date = rs.getDate("date");
 			String type = rs.getString("type");
 			String immat = rs.getString("immat");
 			String ata = rs.getString("ata");
@@ -155,7 +164,7 @@ public class Manager {
 
 		
 		if(checkString(dateTri)){
-			sql += " WHERE date LIKE ?";
+			sql += " WHERE strftime(\"%m/%Y\", date/1000, 'unixepoch') = ?"; //Datetime('2009-11-13 00:00:00')
 		}
 		
 		if(checkString(dateTri) && checkString(nameTri)){
@@ -167,7 +176,7 @@ public class Manager {
 		
 		sql += " ORDER BY " + sort;
 		
-		System.out.println(sql);
+		System.out.println(dateTri + " | " + sql);
 		
 		PreparedStatement st = DB.getConnexion().prepareStatement(sql);
 		
@@ -187,7 +196,7 @@ public class Manager {
 		Vector<Line> vLine = new Vector<Line>();
 		while(rs.next()){
 			int id = rs.getInt("id");
-			String date = rs.getString("date");
+			Date date = rs.getDate("date");
 			String type = rs.getString("type");
 			String immat = rs.getString("immat");
 			String ata = rs.getString("ata");

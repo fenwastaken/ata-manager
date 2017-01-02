@@ -1,11 +1,14 @@
 package ata;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Line {
 
 	int id;
 	
 	String nom;
-	String date;
+	Date date;
 	String type;
 	String immat;
 	String ata;
@@ -18,7 +21,9 @@ public class Line {
 	
 	boolean active;
 	
-	public Line(int id, String nom, String date, String type, String immat, String ata,
+	SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+	
+	public Line(int id, String nom, Date date, String type, String immat, String ata,
 			String tache, boolean formation, boolean execution,
 			boolean controles, boolean encadrement, boolean aprs, boolean active) {
 		super();
@@ -53,11 +58,11 @@ public class Line {
 		this.nom = nom;
 	}
 
-	public String getDate() {
+	public Date getDate() {
 		return date;
 	}
 
-	public void setDate(String date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 
@@ -144,7 +149,7 @@ public class Line {
 
 
 	public String toString(){
-		String ret = this.getDate() + "  |   "
+		String ret = df.format(this.getDate()) + "  |   "
 				+ this.getImmat() + "  |   "
 				+ this.getType() + "  |   "
 				+ this.getAta() + "  |   "

@@ -28,10 +28,12 @@ public class GuiSelectElement extends JPanel{
 		if(line.isActive()){
 				strBt = "Effacer";
 				lab.setForeground(Color.BLACK);
+				btDelete.setForeground(Color.BLACK);
 		}
 		else{
 				strBt = "Rétablir";
 				lab.setForeground(Color.RED);
+				btDelete.setForeground(Color.RED);
 		}
 		
 		btDelete.setText(strBt);
@@ -75,6 +77,7 @@ public class GuiSelectElement extends JPanel{
 				Manager.updateLine(line);
 				strBt = "Rétablir";
 				lab.setForeground(Color.RED);
+				btDelete.setForeground(Color.RED);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -87,6 +90,7 @@ public class GuiSelectElement extends JPanel{
 				Manager.updateLine(line);
 				strBt = "Effacer";
 				lab.setForeground(Color.BLACK);
+				btDelete.setForeground(Color.BLACK);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

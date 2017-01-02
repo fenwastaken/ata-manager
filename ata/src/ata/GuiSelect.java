@@ -228,7 +228,7 @@ public class GuiSelect extends JDialog{
 		String dateFilter = null;
 		
 		if(cbDateSearch.isSelected()){
-			dateFilter = "%" + tfDateSearch.getText() + "%";
+			dateFilter = tfDateSearch.getText();
 		}
 		
 		String nameTri = null;

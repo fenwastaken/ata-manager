@@ -12,7 +12,9 @@ import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Vector;
 
@@ -44,9 +46,6 @@ public class Gui extends JFrame{
 	JComboBox<String> boxTask = new JComboBox<String>();
 	JComboBox<String> boxName = new JComboBox<String>();
 	JComboBox<String> boxDate = new JComboBox<String>();
-	
-
-
 
 	JButton btOK = new JButton("Ajouter");
 	//JButton btDis = new JButton("Afficher");
@@ -76,13 +75,13 @@ public class Gui extends JFrame{
 
 		zoneclient.setLayout(new BoxLayout(zoneclient, BoxLayout.Y_AXIS));
 
-		Date date = new Date(System.currentTimeMillis());
-		SimpleDateFormat df = new SimpleDateFormat("dd/MM/YYYY");
-		String result = df.format(date);
+		Date currentDate = new Date(System.currentTimeMillis());
+		SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+		String result = df.format(currentDate);
 		panDate.getTf().setText(result);
-
+		
 		panName.getTf().setText("Claude Leyour");
-
+		
 		zoneclient.add(panName);
 		zoneclient.add(panDate);
 		zoneclient.add(panType);
@@ -230,7 +229,22 @@ public class Gui extends JFrame{
 	
 	public void insertLine(){
 		String name = panName.getTf().getText();
-		String date = panDate.getTf().getText();
+		
+		Date date = new Date();
+		System.out.println("INIT " + date);
+		try {
+			//here
+			String strDate = panDate.getTf().getText();
+			System.out.println("pan : " + strDate);
+			System.out.println("1 : " +  date.toString());
+			SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+			date = df.parse(strDate);
+			System.out.println("2 : " +  date.toString());
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			labRetour.setText("Date erronnée");
+		}
 		String type = panType.getTf().getText();;
 		String immat = panImmat.getTf().getText();
 		String ata = panAta.getTf().getText();
@@ -284,6 +298,44 @@ public class Gui extends JFrame{
 
 	}
 	
+	
+	public static String cutter(String message){
+		Vector<Integer> vec = new Vector<Integer>();
+		message = message.replace(" ", "");
+		String separator = ",";
+		int start = 0;
+		int stop = message.indexOf(separator, start);
+		String ret = "";
+
+		while(stop <= message.length() && stop != -1){
+			ret = message.substring(start, stop);
+			vec.add(Integer.parseInt(ret));
+			start = stop + 1;
+			stop = message.indexOf(separator, start);
+		}
+
+		ret = message.substring(start);
+		vec.add(Integer.parseInt(ret));
+
+		System.out.println("Original : " + vec.toString());
+		
+		Collections.sort(vec);
+		
+		System.out.println("SORTED: " + vec.toString());
+		
+		String atas = "";
+		for(int integer : vec){
+			atas += integer + ", ";
+		}
+		
+		atas = atas.substring(0, atas.length() - 2);
+		
+		System.out.println("ATAS " + atas);
+		
+		return atas;
+		
+	}
+	
 	public void feedAll(){
 		feedBoxAta();
 		feedBoxType();
@@ -334,12 +386,13 @@ public class Gui extends JFrame{
 				ata = ata.substring(0, ata.indexOf(","));
 				if(text.indexOf(ata) < 0){
 					if(!text.isEmpty()){
-						panAta.getTf().setText(text + ", " + ata);
+						text = text + ", " + ata;
+						panAta.getTf().setText(cutter(text));
+						
 					}
 					else{
 						panAta.getTf().setText(ata);
 					}
-
 				}
 			}
 			
