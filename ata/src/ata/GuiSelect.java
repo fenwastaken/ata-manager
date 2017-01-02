@@ -44,6 +44,7 @@ public class GuiSelect extends JDialog{
 	JRadioButton rdTask = new JRadioButton();
 	JCheckBox cbDesc = new JCheckBox();
 	JComboBox<String> cbbNom = new JComboBox<String>();
+	JCheckBox cbName = new JCheckBox();
 	
 	JCheckBox cbDateSearch = new JCheckBox();
 	JTextField tfDateSearch = new JTextField();
@@ -152,7 +153,6 @@ public class GuiSelect extends JDialog{
 
 		JPanel panDisplayName = new JPanel();
 
-		JCheckBox cbName = new JCheckBox();
 		cbName.setText("Afficher Nom");
 		cbName.setSelected(true);
 		panDisplayName.add(cbName);
@@ -257,12 +257,12 @@ public class GuiSelect extends JDialog{
 		return vLine;
 	}
 
-	public void Excelify(){
+	public void Excelify(boolean displayName){
 		Runnable r = new Runnable() {
 			
 			@Override
 			public void run() {
-				Excel excel = new Excel();
+				Excel excel = new Excel(displayName);
 				String file = excel.create(feedList());
 				System.out.println("done");
 				try {
@@ -290,7 +290,7 @@ public class GuiSelect extends JDialog{
 			}
 			
 			if(e.getSource() == btExcel){
-				Excelify();
+				Excelify(cbName.isSelected());
 			}
 		}
 

@@ -26,7 +26,7 @@ import javax.swing.JPanel;
 
 public class Gui extends JFrame{
 
-	String version = "Version 0.5";
+	String version = "Version 1.0";
 	
 	JPanel zoneclient;
 
@@ -48,10 +48,10 @@ public class Gui extends JFrame{
 
 
 
-	JButton btOK = new JButton("Valider");
-	JButton btDis = new JButton("Afficher");
-	JButton btExcel = new JButton("Excel");
-	JButton btEdit = new JButton("Editer");
+	JButton btOK = new JButton("Ajouter");
+	//JButton btDis = new JButton("Afficher");
+	//JButton btExcel = new JButton("Excel");
+	JButton btEdit = new JButton("Trier");
 
 
 	JLabel labRetour = new JLabel();
@@ -108,8 +108,8 @@ public class Gui extends JFrame{
 		JPanel panBT = new JPanel();
 		panBT.add(labRetour);
 		panBT.add(btOK);
-		panBT.add(btDis);
-		panBT.add(btExcel);
+		//panBT.add(btDis);
+		//panBT.add(btExcel);
 		panBT.add(btEdit);
 		panBT.add(Box.createRigidArea(new Dimension(30,10)));
 
@@ -122,8 +122,8 @@ public class Gui extends JFrame{
 		boxAta.addFocusListener(new appFocusListener());
 		btOK.addFocusListener(new appFocusListener());
 		btOK.addActionListener(new appActionListener());
-		btDis.addActionListener(new appActionListener());
-		btExcel.addActionListener(new appActionListener());
+		//btDis.addActionListener(new appActionListener());
+		//btExcel.addActionListener(new appActionListener());
 		btEdit.addActionListener(new appActionListener());
 		
 		
@@ -291,28 +291,6 @@ public class Gui extends JFrame{
 		feedBoxTask();
 		feedBoxName();
 	}
-	
-	public void excelify(){
-		Runnable r = new Runnable() {
-			
-			@Override
-			public void run() {
-				Excel excel = new Excel();
-				String file = excel.create(null);
-				System.out.println("done");
-				try {
-					Desktop dt = Desktop.getDesktop();
-					dt.open(new File(file));
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		};
-
-		Thread t = new Thread(r);
-		t.start();
-	}
 
 	class appActionListener implements ActionListener{
 
@@ -328,13 +306,13 @@ public class Gui extends JFrame{
 				}
 			}
 			
-			if(e.getSource() == btDis){
-				display();
-			}
-			
-			if(e.getSource() == btExcel){
-				excelify();
-			}
+//			if(e.getSource() == btDis){
+//				display();
+//			}
+//			
+//			if(e.getSource() == btExcel){
+//				excelify();
+//			}
 			
 			if(e.getSource() == btEdit){
 				GuiSelect gui = new GuiSelect();

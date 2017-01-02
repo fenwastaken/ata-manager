@@ -2,6 +2,8 @@ package ata;
 
 public class Line {
 
+	int id;
+	
 	String nom;
 	String date;
 	String type;
@@ -14,10 +16,13 @@ public class Line {
 	boolean encadrement;
 	boolean aprs;
 	
-	public Line(String nom, String date, String type, String immat, String ata,
+	boolean active;
+	
+	public Line(int id, String nom, String date, String type, String immat, String ata,
 			String tache, boolean formation, boolean execution,
-			boolean controles, boolean encadrement, boolean aprs) {
+			boolean controles, boolean encadrement, boolean aprs, boolean active) {
 		super();
+		this. id = id;
 		this.nom = nom;
 		this.date = date;
 		this.type = type;
@@ -29,8 +34,17 @@ public class Line {
 		this.controles = controles;
 		this.encadrement = encadrement;
 		this.aprs = aprs;
+		this.active = active;
 	}
 
+	
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	public String getNom() {
 		return nom;
 	}
@@ -119,34 +133,44 @@ public class Line {
 		this.aprs = aprs;
 	}
 	
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+
+
 	public String toString(){
-		String ret = this.getDate() + ", "
-				+ this.getImmat() + ", "
-				+ this.getType() + ", "
-				+ this.getAta() + ", "
+		String ret = this.getDate() + "  |   "
+				+ this.getImmat() + "  |   "
+				+ this.getType() + "  |   "
+				+ this.getAta() + "  |   "
 				+ this.getTache();
 		
 		if(this.isControles()){
-			ret += ", Contrôles";
+			ret += "  |   Contrôles";
 		}
 		
 		if(this.isExecution()){
-			ret += ", Execution";
+			ret += "  |   Execution";
 		}
 		
 		if(this.isFormation()){
-			ret += ", Formation";
+			ret += "  |   Formation";
 		}
 		
 		if(this.isEncadrement()){
-			ret += ", Encadrement";
+			ret += "  |   Encadrement";
 		}
 		
 		if(this.isAprs()){
-			ret += ", APRS";
+			ret += "  |   APRS";
 		}
 		
-		ret += ", " + this.getNom();
+		ret += "  |   " + this.getNom();
 		
 		return ret;
 		

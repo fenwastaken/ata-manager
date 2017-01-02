@@ -7,6 +7,14 @@ import java.util.Vector;
 
 public class Manager {
 
+	public static void updateLine(Line line) throws SQLException{
+		String sql = "UPDATE line SET active = ? WHERE id = ?";
+		PreparedStatement st = DB.getConnexion().prepareStatement(sql);
+		st.setBoolean(1, line.isActive());
+		st.setInt(2, line.getId());
+		st.executeUpdate();
+	}
+	
 	public static Vector<String> getAllAtas() throws SQLException{
 		String sql = "SELECT number, name FROM ata ORDER BY number";
 		PreparedStatement st = DB.getConnexion().prepareStatement(sql);
@@ -20,8 +28,8 @@ public class Manager {
 
 	public static int saveLine(String name, String date, String type, String immat, String ata, String task, int formation, int execution, int controle, int encadrement, int aprs) throws SQLException{
 		String sql = "INSERT INTO line "
-				+ "(name, date, type, immat, ata, task, formation, execution, controle, encadrement, aprs)"
-				+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+				+ "(name, date, type, immat, ata, task, formation, execution, controle, encadrement, aprs, active)"
+				+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		PreparedStatement st = DB.getConnexion().prepareStatement(sql);
 		st.setString(1, name);
 		st.setString(2, date);
@@ -34,6 +42,7 @@ public class Manager {
 		st.setInt(9, controle);
 		st.setInt(10, encadrement);
 		st.setInt(11, aprs);
+		st.setBoolean(12, true);
 		return st.executeUpdate();
 
 	}
@@ -103,11 +112,12 @@ public class Manager {
 	}
 
 	public static Vector<Line> getAllLinesToObject() throws SQLException{
-		String sql = "SELECT date, type, immat, ata, task, formation, execution, controle,  encadrement, aprs, name FROM line ORDER BY date";
+		String sql = "SELECT id, date, type, immat, ata, task, formation, execution, controle,  encadrement, aprs, name, active FROM line ORDER BY date";
 		PreparedStatement st = DB.getConnexion().prepareStatement(sql);
 		ResultSet rs = st.executeQuery();
 		Vector<Line> vecRet = new Vector<Line>();
 		while(rs.next()){
+			int id = rs.getInt("id");
 			String date = rs.getString("date");
 			String type = rs.getString("type");
 			String immat = rs.getString("immat");
@@ -119,8 +129,9 @@ public class Manager {
 			boolean encadrement = rs.getBoolean("encadrement");
 			boolean aprs = rs.getBoolean("aprs");
 			String name = rs.getString("name");
+			boolean active = rs.getBoolean("active");
 
-			Line line = new Line(name, date, type, immat, ata, task, formation, execution, controle, encadrement, aprs);
+			Line line = new Line(id, name, date, type, immat, ata, task, formation, execution, controle, encadrement, aprs, active);
 
 			vecRet.add(line);
 		}
@@ -139,7 +150,7 @@ public class Manager {
 	}
 	
 	public static Vector<Line> getFilteredLinesToObject(String sort, String dateTri, String nameTri) throws SQLException{
-		String sql = "Select date, type, immat, ata, task, formation, execution, controle, encadrement, aprs, name FROM line";
+		String sql = "Select id, date, type, immat, ata, task, formation, execution, controle, encadrement, aprs, name, active FROM line";
 		
 
 		
@@ -175,6 +186,7 @@ public class Manager {
 		ResultSet rs = st.executeQuery();
 		Vector<Line> vLine = new Vector<Line>();
 		while(rs.next()){
+			int id = rs.getInt("id");
 			String date = rs.getString("date");
 			String type = rs.getString("type");
 			String immat = rs.getString("immat");
@@ -186,8 +198,9 @@ public class Manager {
 			boolean encadrement = rs.getBoolean("encadrement");
 			boolean aprs = rs.getBoolean("aprs");
 			String name = rs.getString("name");
+			boolean active = rs.getBoolean("active");
 			
-			Line line = new Line(name, date, type, immat, ata, task, formation, execution, controle, encadrement, aprs);
+			Line line = new Line(id, name, date, type, immat, ata, task, formation, execution, controle, encadrement, aprs, active);
 			vLine.add(line);
 			System.out.println(type + "|| " + line.toString());
 		}

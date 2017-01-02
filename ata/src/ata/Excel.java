@@ -32,12 +32,19 @@ import jxl.write.WriteException;
 
 public class Excel {
 
-	private static int column = 0;
-	private static int row = 0;
-	private static String content = "";
-	private static String file = "";
+	private int column = 0;
+	private int row = 0;
+	private String content = "";
+	private String file = "";
+	private boolean displayName;
 	
 	
+	
+	public Excel(boolean displayName){
+		this.displayName = displayName;
+	}
+
+
 	public String create(Vector<Line> vLine){
 		
 		int[] iTable = new int[11] ;
@@ -85,7 +92,9 @@ public class Excel {
 			vecHeader.add("Controles");
 			vecHeader.add("Encadrement");
 			vecHeader.add("APRS");
-			vecHeader.add("Nom");
+			if(displayName){
+				vecHeader.add("Nom");
+			}
 			
 			WritableCellFormat wcf = new WritableCellFormat();
 			wcf.setBorder(Border.ALL, BorderLineStyle.THIN, Colour.BLACK);
@@ -101,66 +110,70 @@ public class Excel {
 				
 				
 				for(Line ln : vLine){
-					column = 0;
-					row++;
-					
-					Vector<String> lnContent = new Vector<String>();
-					lnContent.add(ln.getDate());
-					lnContent.add(ln.getType());
-					lnContent.add(ln.getImmat());
-					lnContent.add(ln.getAta());
-					lnContent.add(ln.getTache());
-					
-					if(ln.isFormation()){
-						lnContent.add("Oui");
-					}
-					else{
-						lnContent.add("Non");
-					}
-					
-					if(ln.isExecution()){
-						lnContent.add("Oui");
-					}
-					else{
-						lnContent.add("Non");
-					}
-					
-					if(ln.isControles()){
-						lnContent.add("Oui");
-					}
-					else{
-						lnContent.add("Non");
-					}
-					
-					if(ln.isEncadrement()){
-						lnContent.add("Oui");
-					}
-					else{
-						lnContent.add("Non");
-					}
-					
-					if(ln.isAprs()){
-						lnContent.add("Oui");
-					}
-					else{
-						lnContent.add("Non");
-					}
-					
-					lnContent.add(ln.getNom());
-					
-					//records the longest string in each column
-					int i = 0;
-					WritableCellFormat wcf2 = new WritableCellFormat();
-					wcf2.setBorder(Border.ALL, BorderLineStyle.THIN, Colour.BLACK);
-					for(String str : lnContent){
-						Label label = new Label(column, row, str, wcf2);
-						int width = str.length() + 3;
-						if( iTable[i] < width){
-							iTable[i] = width;
+					if(ln.isActive()){
+						column = 0;
+						row++;
+						
+						Vector<String> lnContent = new Vector<String>();
+						lnContent.add(ln.getDate());
+						lnContent.add(ln.getType());
+						lnContent.add(ln.getImmat());
+						lnContent.add(ln.getAta());
+						lnContent.add(ln.getTache());
+						
+						if(ln.isFormation()){
+							lnContent.add("Oui");
 						}
-						sheet.addCell(label);
-						column++;
-						i++;
+						else{
+							lnContent.add("Non");
+						}
+						
+						if(ln.isExecution()){
+							lnContent.add("Oui");
+						}
+						else{
+							lnContent.add("Non");
+						}
+						
+						if(ln.isControles()){
+							lnContent.add("Oui");
+						}
+						else{
+							lnContent.add("Non");
+						}
+						
+						if(ln.isEncadrement()){
+							lnContent.add("Oui");
+						}
+						else{
+							lnContent.add("Non");
+						}
+						
+						if(ln.isAprs()){
+							lnContent.add("Oui");
+						}
+						else{
+							lnContent.add("Non");
+						}
+						
+						if(displayName){
+							lnContent.add(ln.getNom());
+						}
+						
+						//records the longest string in each column
+						int i = 0;
+						WritableCellFormat wcf2 = new WritableCellFormat();
+						wcf2.setBorder(Border.ALL, BorderLineStyle.THIN, Colour.BLACK);
+						for(String str : lnContent){
+							Label label = new Label(column, row, str, wcf2);
+							int width = str.length() + 3;
+							if( iTable[i] < width){
+								iTable[i] = width;
+							}
+							sheet.addCell(label);
+							column++;
+							i++;
+						}
 					}
 					
 				}
